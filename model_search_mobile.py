@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from operations import *
 from torch.autograd import Variable
-from genotypes import PRIMITIVES, Genotype
+from genotypes import PRIMITIVES
 from torch.distributions import Categorical
 from MobileNetV2 import InvertedResidual
 
@@ -13,7 +13,7 @@ class MixedOp(nn.Module):
     super(MixedOp, self).__init__()
     self.binarize = binarize
 
-    self._dist = Categorical(logits=torch.ones(len(OPS), requires_grad=True))
+    self._dist = Categorical(logits=torch.ones(len(PRIMITIVES), requires_grad=True))
     self._ops = nn.ModuleList()
     for primitive in PRIMITIVES:
       op = OPS[primitive](C_in, C_out, stride, False)
