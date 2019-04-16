@@ -3,7 +3,7 @@ import torch.nn as nn
 from MobileNetV2 import InvertedResidual
 
 OPS = {
-  'none' : lambda C, stride, affine: Zero(stride),
+  'none' : lambda C, C_out, stride, affine: Zero(stride),
   # 'avg_pool_3x3' : lambda C, stride, affine: nn.AvgPool2d(3, stride=stride, padding=1, count_include_pad=False),
   # 'max_pool_3x3' : lambda C, stride, affine: nn.MaxPool2d(3, stride=stride, padding=1),
   # 'skip_connect' : lambda C, stride, affine: Identity() if stride == 1 else FactorizedReduce(C, C, affine=affine),
