@@ -13,7 +13,8 @@ class MixedOp(nn.Module):
     super(MixedOp, self).__init__()
     self.binarize = binarize
 
-    self._dist = Categorical(logits=torch.ones(len(PRIMITIVES), requires_grad=True))
+    self._alpha = nn.Parameter(torch.ones(len(PRIMITIVES)))
+    self._dist = Categorical(logits=self._alpha)
     self._ops = nn.ModuleList()
     for primitive in PRIMITIVES:
       op = OPS[primitive](C_in, C_out, stride, False)
@@ -123,9 +124,15 @@ class Network(nn.Module):
   #   return genotype
 
 if __name__ == '__main__':
-  model = Network(3, 10, None, 20, True)
+  model = Network(32, 10, None, 20, True)
+  optimizer = torch.optim.SGD(model.parameters(), 0.1)
   model.cuda()
   for _ in range(10):
     x = torch.rand(2, 3, 224, 224)
     y = model(x.cuda())
-    print(y.shape)
+    loss = y.sum().norm()
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+    print(loss)
