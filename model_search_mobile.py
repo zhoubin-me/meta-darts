@@ -26,7 +26,7 @@ class MixedOp(nn.Module):
     dist = Categorical(logits=self._alpha)
     if self.binarize:
       idxs = torch.multinomial(self._dist.probs, 2)
-      probs_scale = self._dist.probs[idxs].sum()
+      probs_scale = dist.probs[idxs].sum()
       out = self._ops[idxs[0]](x) * dist.probs[idxs[0]] + self._ops[idxs[1]](x) * dist.probs[idxs[1]]
       return out / probs_scale
     else:
