@@ -12,9 +12,7 @@ class MixedOp(nn.Module):
   def __init__(self, C_in, C_out, stride, binarize=False):
     super(MixedOp, self).__init__()
     self.binarize = binarize
-
     self._alpha = nn.Parameter(torch.ones(len(PRIMITIVES)))
-    self._dist = Categorical(logits=self._alpha)
     self._ops = nn.ModuleList()
     for primitive in PRIMITIVES:
       op = OPS[primitive](C_in, C_out, stride, False)
@@ -25,13 +23,14 @@ class MixedOp(nn.Module):
 
 
   def forward(self, x):
+    dist = Categorical(logits=self._alpha)
     if self.binarize:
       idxs = torch.multinomial(self._dist.probs, 2)
       probs_scale = self._dist.probs[idxs].sum()
-      out = self._ops[idxs[0]](x) * self._dist.probs[idxs[0]] + self._ops[idxs[1]](x) * self._dist.probs[idxs[1]]
+      out = self._ops[idxs[0]](x) * dist.probs[idxs[0]] + self._ops[idxs[1]](x) * dist.probs[idxs[1]]
       return out / probs_scale
     else:
-      return sum(w * op(x) for w, op in zip(self._dist.probs, self._ops))
+      return sum(w * op(x) for w, op in zip(dist.probs, self._ops))
 
 
 
