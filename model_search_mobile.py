@@ -23,7 +23,7 @@ class MixedOp(nn.Module):
 
 
 
-  def forward(self, x, weights):
+  def forward(self, x):
     if self.binarize:
       idxs = torch.multinomial(self._dist.logits, 2)
       probs_scale = self._dist.probs[idxs].sum()
