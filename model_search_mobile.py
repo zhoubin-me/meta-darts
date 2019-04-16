@@ -65,7 +65,6 @@ class Network(nn.Module):
 
     self.global_pooling = nn.AdaptiveAvgPool2d(1)
     self.classifier = nn.Linear(C_curr, num_classes)
-    self._initialize_alphas()
 
   def new(self):
     model_new = Network(self._C, self._num_classes, self._layers, self._criterion).cuda()
@@ -128,5 +127,5 @@ if __name__ == '__main__':
   model.cuda()
   for _ in range(10):
     x = torch.rand(2, 3, 224, 224)
-    y = model(x)
+    y = model(x.cuda())
     print(y.shape)
