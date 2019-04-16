@@ -25,7 +25,7 @@ class MixedOp(nn.Module):
 
   def forward(self, x):
     if self.binarize:
-      idxs = torch.multinomial(self._dist.logits, 2)
+      idxs = torch.multinomial(self._dist.probs, 2)
       probs_scale = self._dist.probs[idxs].sum()
       out = self._ops[idxs[0]](x) * self._dist.probs[idxs[0]] + self._ops[idxs[1]](x) * self._dist.probs[idxs[1]]
       return out / probs_scale
