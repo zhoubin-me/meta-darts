@@ -3,7 +3,7 @@
 
 ## Step 1.
 
-```python
+```bash
 python train_search.py --help
 ```
 This is search process for architectures
@@ -15,7 +15,7 @@ Copy best architecture genotypes, paste and name well in genotypes.py
 
 ## Step 3.
 
-```python
+```bash
 python train.py --arch NAME
 ```
 This is training process for specific architecture on cifar10
@@ -25,7 +25,7 @@ here NAME refers to the achitecture genotype you defined in step 2, e.g. DARTS_V
 
 ## Step 4.
 
-```python
+```bash
 python train_imagenet.py --arch NAME
 ```
 
